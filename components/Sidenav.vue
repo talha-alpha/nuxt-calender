@@ -52,51 +52,6 @@
         />
       </div>
 
-      <p class="text-xl font-bold mb-2">When</p>
-      <div class="flex-col overflow-hidden p-4 bg-zinc-800 rounded-lg mb-4">
-        <div class="flex overflow-hidden">
-          <p class="text-lg font-bold mb-2">Exact Time</p>
-          <button></button>
-        </div>
-        <input
-          type="time"
-          name="tme"
-          id="t"
-          v-model="startTime"
-          class="flex w-full bg-zinc-900 p-4 justify-center rounded-xl mb-4"
-        />
-      </div>
-
-      <p class="text-xl font-bold mb-2">Who</p>
-      <div class="flex-col overflow-hidden p-4 bg-zinc-800 rounded-lg mb-4">
-        <select
-          name="who"
-          id=""
-          placeholder="Select an Option"
-          class="flex overflow-hidden p-4 w-full text-white bg-zinc-900 rounded-lg"
-        >
-          <option value="">Select an Option</option>
-          <option>Registrants</option>
-        </select>
-      </div>
-
-      <p class="text-xl font-bold mb-2">What</p>
-      <div class="flex-col overflow-hidden p-4 bg-zinc-800 rounded-lg mb-8">
-        <select
-          name="what"
-          id=""
-          placeholder="Select an Option"
-          class="flex overflow-hidden p-4 w-full text-white bg-zinc-900 rounded-lg"
-        >
-          <option value="">Select an Option</option>
-          <option>ACTIVECOMPAIGN</option>
-          <option>AEvent Functions</option>
-          <option>AISENSY</option>
-          <option>AWEBER</option>
-          <option>BUSINESS GLU</option>
-        </select>
-      </div>
-
       <div class="flex overflow-hidden justify-between gap-2 items-end">
         <button
           type="button"
