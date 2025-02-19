@@ -1,45 +1,59 @@
 <template>
-  <div class="flex overflow-hidden text-md bg-zinc-700 text-white">
-    <FullCalender
+  <div class="flex overflow-hidden text-md bg-zinc-900 text-white">
+    <FullCalendar
       :options="calendarOptions"
       @date-selected="handleDateSelected"
-      @time-selected="handleTimeSelected"
-      class="flex overflow-hidden min-h-screen w-full"
+      @event-selected="handleEventSelected"
+      class="flex overflow-hidden h-screen w-full"
     />
     <Sidenav
       v-if="showSideNav"
       :selected-date="selectedDate"
-      :selected-time="selectedTime"
+      :selected-event="selectedEvent"
       @add-event="handleAddEvent"
-      @close="showSideNav = false"
+      @close="closeSidenav"
     />
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed } from "vue";
-import FullCalender from "./components/FullCalendar.vue";
+import FullCalendar from "./components/FullCalendar.vue";
 import Sidenav from "./components/Sidenav.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-const events = ref([]); // Initialize as array
-
+const events = ref([]);
 const showSideNav = ref(false);
 const selectedDate = ref("");
-const selectedTime = ref("");
+const selectedEvent = ref(null);
 
 const handleDateSelected = (date) => {
   selectedDate.value = date;
+  selectedEvent.value = null;
   showSideNav.value = true;
 };
 
-const handleTimeSelected = (time) => {
-  selectedTime.value = time;
+const handleEventSelected = (event) => {
+  selectedEvent.value = event;
+  selectedDate.value = event.start.split("T")[0];
   showSideNav.value = true;
 };
 
 const handleAddEvent = (event) => {
-  events.value.push(event);
+  if (event.id) {
+    const index = events.value.findIndex((e) => e.id === event.id);
+    if (index !== -1) {
+      events.value[index] = event;
+    }
+  } else {
+    event.id = Date.now().toString();
+    events.value.push(event);
+  }
+  showSideNav.value = false;
+};
+
+const closeSidenav = () => {
+  selectedEvent.value = null;
   showSideNav.value = false;
 };
 
