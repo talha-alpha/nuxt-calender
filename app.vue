@@ -1,18 +1,29 @@
 <template>
-  <div class="flex overflow-hidden text-md bg-zinc-900 text-white">
-    <FullCalendar
-      :options="calendarOptions"
-      @date-selected="handleDateSelected"
-      @event-selected="handleEventSelected"
-      class="flex overflow-hidden h-screen w-full"
-    />
-    <Sidenav
+  <div class="relative">
+    <div
       v-if="showSideNav"
-      :selected-date="selectedDate"
-      :selected-event="selectedEvent"
-      @add-event="handleAddEvent"
-      @close="closeSidenav"
-    />
+      class="fixed inset-0 bg-white/5 backdrop-blur-sm z-20 transition-all duration-300"
+      @click="closeSidenav"
+    ></div>
+
+    <div class="flex overflow-hidden text-md bg-zinc-700 text-white h-screen">
+      <FullCalendar
+        :options="calendarOptions"
+        @date-selected="handleDateSelected"
+        @event-selected="handleEventSelected"
+        class="flex overflow-hidden w-full h-full bg-zinc-900"
+      />
+
+      <Sidenav
+        v-if="showSideNav"
+        class="z-30 relative h-full bg-zinc-900"
+        :selected-date="selectedDate"
+        :selected-event="selectedEvent"
+        @add-event="handleAddEvent"
+        @delete-event="handleDeleteEvent"
+        @close="closeSidenav"
+      />
+    </div>
   </div>
 </template>
 
@@ -44,11 +55,18 @@ const handleAddEvent = (event) => {
     const index = events.value.findIndex((e) => e.id === event.id);
     if (index !== -1) {
       events.value[index] = event;
+    } else {
+      events.value.push(event);
     }
   } else {
     event.id = Date.now().toString();
     events.value.push(event);
   }
+  showSideNav.value = false;
+};
+
+const handleDeleteEvent = (eventId) => {
+  events.value = events.value.filter((event) => event.id !== eventId);
   showSideNav.value = false;
 };
 
