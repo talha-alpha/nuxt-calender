@@ -2,41 +2,56 @@
   <div class="relative">
     <div
       v-if="showSideNav"
-      class="fixed inset-0 bg-white/5 backdrop-blur-sm z-20 transition-all duration-300"
+      class="fixed inset-0 bg-white/5 backdrop-blur-sm z-20 transition duration-700"
       @click="closeSidenav"
     ></div>
 
-    <div class="flex overflow-hidden text-md bg-zinc-700 text-white h-screen">
+    <div class="flex overflow-hidden text-md bg-zinc-900 text-white h-screen">
       <FullCalendar
         :options="calendarOptions"
         @date-selected="handleDateSelected"
         @event-selected="handleEventSelected"
         class="flex overflow-hidden w-full h-full bg-zinc-900"
       />
-
       <Sidenav
         v-if="showSideNav"
-        class="z-30 relative h-full bg-zinc-900"
+        class="z-30 relative h-full bg-zinc-950"
         :selected-date="selectedDate"
         :selected-event="selectedEvent"
         @add-event="handleAddEvent"
         @delete-event="handleDeleteEvent"
         @close="closeSidenav"
       />
+      <div
+        v-if="showUndoToast"
+        class="fixed bottom-5 right-5 font-bold bg-zinc-950 text-white px-6 py-4 rounded-lg shadow-md flex items-center gap-8 z-20 transition duration-200 ease-in-out border-l-4 border-red-500"
+      >
+        <span>Event Deleted</span>
+        <button
+          @click="undoDelete"
+          class="bg-blue-500 px-4 py-2 rounded-xl hover:bg-blue-400 transition duration-300 ease-in-out"
+        >
+          Undo
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
+import { useEventStore } from "./stores/eventStore";
 import FullCalendar from "./components/FullCalendar.vue";
 import Sidenav from "./components/Sidenav.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-const events = ref([]);
+const eventStore = useEventStore();
 const showSideNav = ref(false);
 const selectedDate = ref("");
 const selectedEvent = ref(null);
+const deletedEvent = ref(null);
+const showUndoToast = ref(false);
+let undoTimeout = null;
 
 const handleDateSelected = (date) => {
   selectedDate.value = date;
@@ -51,23 +66,34 @@ const handleEventSelected = (event) => {
 };
 
 const handleAddEvent = (event) => {
-  if (event.id) {
-    const index = events.value.findIndex((e) => e.id === event.id);
-    if (index !== -1) {
-      events.value[index] = event;
-    } else {
-      events.value.push(event);
-    }
-  } else {
-    event.id = Date.now().toString();
-    events.value.push(event);
-  }
+  eventStore.addEvent(event);
   showSideNav.value = false;
 };
 
 const handleDeleteEvent = (eventId) => {
-  events.value = events.value.filter((event) => event.id !== eventId);
+  const eventToDelete = eventStore.events.find((event) => event.id === eventId);
+  if (!eventToDelete) return;
+
+  deletedEvent.value = eventToDelete;
+  eventStore.deleteEvent(eventId);
   showSideNav.value = false;
+
+  showUndoToast.value = true;
+
+  clearTimeout(undoTimeout);
+  undoTimeout = setTimeout(() => {
+    deletedEvent.value = null;
+    showUndoToast.value = false;
+  }, 5000);
+};
+
+const undoDelete = () => {
+  if (deletedEvent.value) {
+    eventStore.addEvent(deletedEvent.value);
+    deletedEvent.value = null;
+    showUndoToast.value = false;
+    clearTimeout(undoTimeout);
+  }
 };
 
 const closeSidenav = () => {
@@ -78,6 +104,18 @@ const closeSidenav = () => {
 const calendarOptions = reactive({
   plugins: [dayGridPlugin],
   initialView: "dayGridMonth",
-  events: computed(() => events.value),
+  events: computed(() => eventStore.events),
 });
+
+onMounted(() => {
+  console.log("Current Events:", eventStore.events);
+});
+
+watch(
+  () => eventStore.events,
+  (newEvents) => {
+    console.log("Updated Events:", newEvents);
+  },
+  { deep: true }
+);
 </script>

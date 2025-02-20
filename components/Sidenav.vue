@@ -81,6 +81,7 @@
         type="text"
         id="title"
         v-model="title"
+        maxlength="20"
         class="w-full bg-zinc-800 text-white px-4 py-3 rounded-md mt-2 focus:ring-2 focus:ring-blue-500 outline-none"
         placeholder="Enter event title"
         required
@@ -119,12 +120,12 @@
 <script setup>
 import { ref, watch, defineProps, defineEmits } from "vue";
 
-const props = defineProps(["selectedDate", "selectedTime", "selectedEvent"]);
+const props = defineProps(["selectedDate", "selectedEvent"]);
 const emit = defineEmits(["add-event", "delete-event", "close"]);
 
 const title = ref("");
 const startDate = ref(props.selectedDate || getCurrentDate());
-const startTime = ref(props.selectedTime || getCurrentTime());
+const startTime = ref(getCurrentTime());
 const eventId = ref(null);
 
 watch(
@@ -139,7 +140,7 @@ watch(
     } else {
       title.value = "";
       startDate.value = props.selectedDate || getCurrentDate();
-      startTime.value = props.selectedTime || getCurrentTime();
+      startTime.value = getCurrentTime();
       eventId.value = null;
     }
   },
@@ -164,12 +165,11 @@ const deleteEvent = () => {
 };
 
 const duplicateEvent = () => {
-  const newEvent = {
+  emit("add-event", {
     id: Date.now().toString(),
     title: title.value,
     start: `${startDate.value}T${startTime.value}`,
-  };
-  emit("add-event", newEvent);
+  });
 };
 
 const close = () => {
@@ -181,7 +181,6 @@ function getCurrentDate() {
 }
 
 function getCurrentTime() {
-  const now = new Date();
-  return now.toTimeString().slice(0, 5);
+  return new Date().toTimeString().slice(0, 5);
 }
 </script>
