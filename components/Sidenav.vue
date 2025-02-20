@@ -1,12 +1,12 @@
 <template>
   <div
-    class="fixed right-0 top-0 h-full w-[25%] bg-zinc-900 text-white p-5 z-10"
+    class="fixed right-0 top-0 h-full lg:w-[25%] w-[60%] bg-zinc-900 text-white p-5 z-10 lg:text-md xl:text-md"
     @click.stop
   >
     <div
       class="flex justify-between border-b border-zinc-600 backdrop-blur-sm pb-4"
     >
-      <h2 class="text-xl font-semibold self-center">
+      <h2 class="lg:text-xl text-lg font-semibold self-center">
         {{ selectedEvent ? "Edit Event" : "Create Event" }}
       </h2>
       <div v-if="selectedEvent" class="flex gap-2">

@@ -84,7 +84,7 @@ const handleDeleteEvent = (eventId) => {
   undoTimeout = setTimeout(() => {
     deletedEvent.value = null;
     showUndoToast.value = false;
-  }, 5000);
+  }, 4000);
 };
 
 const undoDelete = () => {
