@@ -1,10 +1,10 @@
 <template>
   <div
-    class="fixed right-0 top-0 h-full lg:w-[25%] w-[60%] bg-zinc-900 text-white p-5 z-10 lg:text-md xl:text-md"
+    class="fixed right-0 top-0 h-full lg:w-[25%] w-[60%] bg-neutral-900 text-white p-5 z-10 lg:text-md xl:text-md"
     @click.stop
   >
     <div
-      class="flex justify-between border-b border-zinc-600 backdrop-blur-sm pb-4"
+      class="flex justify-between border-b border-neutral-600 backdrop-blur-sm pb-4"
     >
       <h2 class="lg:text-xl text-lg font-semibold self-center">
         {{ selectedEvent ? "Edit Event" : "Create Event" }}
@@ -13,7 +13,7 @@
         <button
           type="button"
           @click="duplicateEvent"
-          class="relative text-white bg-zinc-800 rounded-full hover:bg-zinc-700 w-1/2 p-2 transition group"
+          class="relative text-white bg-neutral-800 rounded-full hover:bg-neutral-700 w-1/2 p-2 transition group duration-500"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@
             />
           </svg>
           <span
-            class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-zinc-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
           >
             Duplicate
           </span>
@@ -44,7 +44,7 @@
         <button
           type="button"
           @click="deleteEvent"
-          class="relative text-white w-1/2 p-2 bg-zinc-800 rounded-full hover:bg-zinc-700 transition group"
+          class="relative text-white w-1/2 p-2 bg-neutral-800 rounded-full hover:bg-neutral-700 transition group duration-500"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +67,7 @@
           </svg>
           <!-- Tooltip -->
           <span
-            class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-zinc-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
           >
             Delete
           </span>
@@ -76,13 +76,13 @@
     </div>
 
     <div class="mt-5">
-      <label for="title" class="text-lg font-semibold">Event Title</label>
+      <label for="title" class="text-md font-semibold">Event Title</label>
       <input
         type="text"
         id="title"
         v-model="title"
         maxlength="20"
-        class="w-full bg-zinc-800 text-white px-4 py-3 rounded-md mt-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        class="w-full bg-neutral-900 text-white px-4 py-3 text-md rounded-md mt-2 border-neutral-700 border 2 focus:ring-2 focus:ring-blue-500 outline-none"
         placeholder="Enter event title"
         required
       />
@@ -90,11 +90,11 @@
 
     <form @submit.prevent="handleSubmit" class="mt-4">
       <div class="mt-4">
-        <label class="text-lg font-semibold">Time</label>
+        <label class="text-md font-semibold">Time</label>
         <input
           type="time"
           v-model="startTime"
-          class="w-full bg-zinc-800 text-white px-4 py-3 rounded-md mt-2 focus:ring-2 focus:ring-blue-500 outline-none"
+          class="w-full bg-neutral-900 text-white px-4 py-3 text-md rounded-md mt-2 border-neutral-700 border 2 focus:ring-2 focus:ring-blue-500 outline-none"
         />
       </div>
 
@@ -102,13 +102,13 @@
         <button
           type="button"
           @click="close"
-          class="bg-zinc-600 text-white w-1/2 py-2 rounded-md hover:bg-zinc-500 transition"
+          class="bg-neutral-900 text-white w-1/2 py-2 rounded-md hover:bg-neutral-800 border-neutral-700 border 2 transition duration-500"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="bg-blue-500 text-white w-1/2 py-2 rounded-md hover:bg-blue-400 transition"
+          class="bg-blue-500 text-white w-1/2 py-2 rounded-md hover:bg-blue-400 transition duration-500"
         >
           {{ selectedEvent ? "Update" : "Save" }}
         </button>
@@ -184,3 +184,4 @@ function getCurrentTime() {
   return new Date().toTimeString().slice(0, 5);
 }
 </script>
+<style></style>

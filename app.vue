@@ -2,16 +2,16 @@
   <div class="relative">
     <div
       v-if="showSideNav"
-      class="fixed inset-0 bg-white/5 backdrop-blur-sm z-20 transition duration-700"
+      class="fixed inset-0 bg-white/5 backdrop-blur-xs z-10 transition duration-700"
       @click="closeSidenav"
     ></div>
 
-    <div class="flex overflow-hidden text-md bg-zinc-900 text-white h-screen">
+    <div class="flex overflow-hidden text-md text-white h-screen">
       <FullCalendar
         :options="calendarOptions"
         @date-selected="handleDateSelected"
         @event-selected="handleEventSelected"
-        class="flex overflow-hidden w-full h-full bg-zinc-900"
+        class="flex overflow-hidden w-full h-full bg-neutral-950"
       />
       <Sidenav
         v-if="showSideNav"
@@ -24,7 +24,7 @@
       />
       <div
         v-if="showUndoToast"
-        class="fixed bottom-5 right-5 font-bold bg-zinc-950 text-white px-6 py-4 rounded-lg shadow-md flex items-center gap-8 z-20 transition duration-200 ease-in-out border-l-4 border-red-500"
+        class="fixed bottom-5 right-5 font-bold bg-black text-white px-6 py-4 rounded-lg shadow-md flex items-center gap-8 z-20 transition duration-200 ease-in-out border-l-4 border-red-500"
       >
         <span>Event Deleted</span>
         <button
