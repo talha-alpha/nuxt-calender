@@ -1,7 +1,10 @@
 <template>
-  <FullCalendar :options="calendarOptions" class="h-full" />
+  <FullCalendar
+    :options="calendarOptions"
+    :views="['month', 'week', 'day']"
+    class="h-full"
+  />
 </template>
-
 <script setup>
 import { defineProps, defineEmits, computed } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
@@ -19,7 +22,13 @@ const props = defineProps({
 
 const calendarOptions = computed(() => ({
   ...props.options,
-  plugins: [...props.options.plugins, interactionPlugin],
+  plugins: [...props.options.plugins, dayGridPlugin, interactionPlugin],
+  initialView: "dayGridMonth", // Set default view to Month
+  headerToolbar: {
+    left: "prev,next today",
+    center: "title",
+    right: "dayGridMonth,dayGridWeek,dayGridDay", // Month, Week, Day options
+  },
   dateClick: (info) => {
     emit("date-selected", info.dateStr);
   },

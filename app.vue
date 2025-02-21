@@ -44,6 +44,8 @@ import { useEventStore } from "./stores/eventStore";
 import FullCalendar from "./components/FullCalendar.vue";
 import Sidenav from "./components/Sidenav.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import moment from "moment";
 
 const eventStore = useEventStore();
 const showSideNav = ref(false);
@@ -102,10 +104,35 @@ const closeSidenav = () => {
 };
 
 const calendarOptions = reactive({
-  plugins: [dayGridPlugin],
+  plugins: [dayGridPlugin, interactionPlugin],
   initialView: "dayGridMonth",
   events: computed(() => eventStore.events),
+  dayCellContent: (arg) => {
+    const count = calculateDateCount(arg.date);
+    return {
+      html: `<div>${arg.dayNumberText}<br/><span style="font-size:15px; color:grey;">${count}</span></div>`,
+    };
+  },
 });
+onMounted(() => {
+  console.log("Current Events:", eventStore.events);
+});
+
+watch(
+  () => eventStore.events,
+  (newEvents) => {
+    console.log("Updated Events:", newEvents);
+  },
+  { deep: true }
+);
+
+// Function to calculate count for each date
+const calculateDateCount = (date) => {
+  const today = moment().startOf("day"); // Get current date
+  const targetDate = moment(date).startOf("day");
+
+  return targetDate.diff(today, "days"); // Difference in days
+};
 
 onMounted(() => {
   console.log("Current Events:", eventStore.events);
